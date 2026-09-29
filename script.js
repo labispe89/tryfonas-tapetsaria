@@ -1,0 +1,32 @@
+const menuButton = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.site-nav');
+
+menuButton?.addEventListener('click', () => {
+  const open = menuButton.getAttribute('aria-expanded') === 'true';
+  menuButton.setAttribute('aria-expanded', String(!open));
+  menu.classList.toggle('open', !open);
+  document.body.classList.toggle('menu-open', !open);
+});
+
+menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+  menu.classList.remove('open');
+  menuButton?.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('menu-open');
+}));
+
+document.querySelector('#year').textContent = new Date().getFullYear();
+
+const items = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  items.forEach((item) => observer.observe(item));
+} else {
+  items.forEach((item) => item.classList.add('visible'));
+}
